@@ -4,6 +4,12 @@ import App from './App';
 
 test('renders learn react link', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const header = screen.getByText("Groceries catalogue");
+  expect(header).toBeInTheDocument();
+
+  const searchPage = screen.getByText(/search grocery/i);
+  expect(searchPage).toBeInTheDocument();
+
+  const copyright = screen.getByText(/©/i);
+  expect(copyright).toBeInTheDocument();
 });
