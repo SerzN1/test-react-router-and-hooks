@@ -20,7 +20,10 @@ export const useGroceries = (q?: string) => {
         setData(res);
         setIsLoading(false);
       })
-      .catch(setError);
+      .catch((err) => {
+          setError(err);
+          setIsLoading(false);
+      });
 
     return () => {};
   }, [q]);

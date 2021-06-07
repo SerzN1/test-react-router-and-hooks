@@ -7,7 +7,7 @@ import { Title } from "../components/ui/Title";
 import { useGroceries } from "../api/groceries";
 import { useQuery } from "../hooks/useQuery";
 import { groceriesDataAdapter } from "../api/groceriesUtils";
-import { Loader } from "../components/Loader";
+import { useDebounce } from "../hooks/useDebounce";
 
 export const SearchPage: React.FC = () => {
   const history = useHistory();
@@ -16,21 +16,20 @@ export const SearchPage: React.FC = () => {
   const handleSearch = (q: string) => {
     history.push(q ? `?q=${q}` : "/");
   };
-  const { isLoading, error, data } = useGroceries(q);
+  const debouncedQ = useDebounce(q, 300);
+  const { isLoading, error, data } = useGroceries(debouncedQ)
   const searchItems = useMemo(() => groceriesDataAdapter(data), [data]);
 
   return (
     <div>
       <Title>Search Grocery</Title>
-      <SearchForm defaultValue={q} handleSearch={handleSearch} />
-      {q ? null : <Alert title="Type something in to find groceries" />}
-      <Loader error={error} isLoading={isLoading}>
-        {searchItems.length ? (
-          <SearchResults items={searchItems} />
-        ) : (
-          <Alert title="We were searching everywhere but nothing is found" />
-        )}
-      </Loader>
+      <SearchForm value={q} handleSearch={handleSearch} isLoading={isLoading} />
+      {!q ?? <Alert title="Type something in to find groceries" />}
+      {error ? <Alert type="error" title={error.toString()} /> : null}
+      {searchItems.length ? <SearchResults items={searchItems} /> : null}
+      {!searchItems.length && !isLoading && !error ? (
+        <Alert title="We were searching everywhere but nothing is found" />
+      ) : null}
     </div>
   );
 };

@@ -3,13 +3,13 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   preloader: {
-    height: "2rem",
-    padding: "1rem",
+    height: (size: number | string) => (typeof size === "number") ? `${size}px` : size,
+    width: (size: number | string) => typeof size === "number" ? `${size}px` : size,
 
     "&:before": {
       content: '""',
-      width: "2rem",
-      height: "2rem",
+      width: "100%",
+      height: "100%",
       display: "block",
       boxSizing: 'border-box',
       border: ".25rem solid black",
@@ -29,7 +29,11 @@ const useStyles = createUseStyles({
   },
 });
 
-export const Preloader: React.FC = () => {
-  const styles = useStyles();
+type useStylesProps = {
+    size?: number | string;
+};
+
+export const Preloader: React.FC<useStylesProps> = ({ size = "2rem"}) => {
+  const styles = useStyles(size);
   return <div className={styles.preloader} />;
 };

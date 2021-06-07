@@ -11,6 +11,7 @@ const useStyles = createUseStyles({
   button: {
     border: "1px solid black",
     fontWeight: "700",
+    lineHeight: 1.5,
     padding: ".5rem 1rem",
     cursor: "pointer",
   },

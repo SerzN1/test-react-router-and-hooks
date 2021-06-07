@@ -2,10 +2,12 @@ import React, { useRef } from "react";
 import { createUseStyles } from "react-jss";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
+import { Preloader } from "./ui/Preloader";
 
 type SearchFormProps = {
   method?: string;
-  defaultValue?: string;
+  value?: string;
+  isLoading?: boolean;
   handleSearch: (q: string) => void;
 };
 
@@ -18,7 +20,8 @@ const useStyles = createUseStyles({
 
 export const SearchForm: React.FC<SearchFormProps> = ({
   method = "post",
-  defaultValue,
+  value = "",
+  isLoading = false,
   handleSearch,
 }) => {
   const styles = useStyles();
@@ -32,8 +35,13 @@ export const SearchForm: React.FC<SearchFormProps> = ({
   };
   return (
     <form method={method} onSubmit={handleSubmit} className={styles.form}>
-      <Input defaultValue={defaultValue} ref={inputEl} type="search" />
-      <Button type="submit">Search</Button>
+      <Input
+        value={value}
+        ref={inputEl}
+        type="search"
+        onChange={handleSearch}
+      />
+      <Button type="submit">{isLoading ? <Preloader size={19} /> : "Search"}</Button>
     </form>
   );
 };
